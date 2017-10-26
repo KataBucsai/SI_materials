@@ -11,6 +11,11 @@ namespace CreateClass
 
             Console.WriteLine(person.ToString());
             
+            Room room = new Room(5);
+            Person employee = new Employee("Jane", new DateTime(1980, 11, 11), Gender.Female, 5500, "Manager", room);
+
+            Console.WriteLine(employee.ToString());
+
         }
     }
 }
