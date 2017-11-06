@@ -21,6 +21,20 @@ namespace SequentialCollections
                 Console.WriteLine(obj);
             }
 
+            Console.WriteLine();
+
+            Stack stack = new Stack();
+            stack.Push("First");
+            stack.Push("Second");
+            stack.Push("Third");
+            stack.Push("Fourth");
+
+            while (stack.Count > 0)
+            {
+                object obj = stack.Pop();
+                Console.WriteLine(obj);
+            }
+
             Console.Read();      
         }
     }
