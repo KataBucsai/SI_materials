@@ -17,6 +17,17 @@ namespace IsolatedStorageDemo
             StreamWriter userWriter = new StreamWriter(userStream);
             userWriter.WriteLine("User Prefs");
             userWriter.Close();
+
+            string[] files = userStore.GetFileNames("UserSettings.set");
+            if (files.Length == 0)
+            {
+                Console.WriteLine("File was not found");
+            }
+            userStream = new IsolatedStorageFileStream("UserSettings.set", FileMode.Open, userStore);
+            StreamReader userReader = new StreamReader(userStream);
+            string contents = userReader.ReadToEnd();
+            Console.WriteLine(contents);
+            Console.Read();
         }
     }
 }
