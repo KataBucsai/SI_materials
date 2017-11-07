@@ -10,12 +10,15 @@ namespace SeekAndArchive
     class Program
     {
         static List<FileInfo> FoundFiles;
+        static List<FileSystemWatcher> watchers;
+
 
         static void Main(string[] args)
         {
             string fileName = args[0];
             string directoryName = args[1];
             FoundFiles = new List<FileInfo>();
+            watchers = new List<FileSystemWatcher>();
 
             //examine if the given directory exists at all 
             DirectoryInfo rootDir = new DirectoryInfo(directoryName);
@@ -33,7 +36,9 @@ namespace SeekAndArchive
             {
                 Console.WriteLine("{0}", fil.FullName);
             }
-            Console.ReadKey();
+
+            Console.ReadLine();
+
         }
 
         static void RecursiveSearch(List<FileInfo> foundFiles, string fileName, DirectoryInfo currentDirectory)
@@ -41,11 +46,22 @@ namespace SeekAndArchive
             foreach (var fil in currentDirectory.GetFiles(fileName))
             {
                 foundFiles.Add(fil);
+                FileSystemWatcher newWatcher = new FileSystemWatcher(fil.DirectoryName, fil.Name);
+                newWatcher.Changed += new FileSystemEventHandler(WatcherChanged);
+                newWatcher.EnableRaisingEvents = true;
+                watchers.Add(newWatcher);
             }
             foreach (DirectoryInfo dir in currentDirectory.GetDirectories())
             {
                 RecursiveSearch(foundFiles, fileName, dir);
             }
         }
+
+        static void WatcherChanged(object sender, FileSystemEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Changed)
+                Console.WriteLine("{0} has been changed!", e.FullPath);
+        }
+
     }
 }
